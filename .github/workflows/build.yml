@@ -26,11 +26,14 @@ jobs:
         with:
           packages: platform-tools platforms;android-33 build-tools;33.0.2
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Install Gradle 7.5.1
+        run: |
+          wget -q https://services.gradle.org/distributions/gradle-7.5.1-bin.zip
+          unzip -q gradle-7.5.1-bin.zip
+          echo "$PWD/gradle-7.5.1/bin" >> $GITHUB_PATH
 
       - name: Build Android APK
-        run: ./gradlew android:assembleDebug --stacktrace
+        run: gradle android:assembleDebug --stacktrace
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
