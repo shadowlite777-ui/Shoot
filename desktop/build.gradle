@@ -18,12 +18,3 @@ jar {
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
 }
-
-task run(type: JavaExec) {
-    dependsOn classes
-    mainClass = application.mainClass.get()
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    workingDir = rootProject.file('assets').absolutePath
-    ignoreExitValue = true
-}
