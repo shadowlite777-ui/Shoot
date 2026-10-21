@@ -23,7 +23,7 @@ task run(type: JavaExec) {
     dependsOn classes
     mainClass = application.mainClass.get()
     classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.`in`
+    standardInput = System.in
     workingDir = rootProject.file('assets').absolutePath
     ignoreExitValue = true
 }
