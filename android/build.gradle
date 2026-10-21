@@ -41,13 +41,13 @@ dependencies {
 }
 
 task copyAndroidNatives {
-    doFirst {
+    doLast {
         file("libs/armeabi-v7a/").mkdirs()
         file("libs/arm64-v8a/").mkdirs()
         file("libs/x86/").mkdirs()
         file("libs/x86_64/").mkdirs()
 
-        configurations.natives.copy().files.each { jar ->
+        configurations.natives.files.each { jar ->
             def outputDir = null
             if(jar.name.endsWith("natives-armeabi-v7a.jar")) outputDir = file("libs/armeabi-v7a")
             if(jar.name.endsWith("natives-arm64-v8a.jar")) outputDir = file("libs/arm64-v8a")
@@ -64,4 +64,6 @@ task copyAndroidNatives {
     }
 }
 
-preBuild.dependsOn copyAndroidNatives
+android.applicationVariants.all { variant ->
+    variant.allProcessResources.dependsOn(copyAndroidNatives)
+}
