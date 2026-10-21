@@ -1,17 +1,29 @@
-sourceCompatibility = 1.7
+apply plugin: "application"
 
-run {
+application {
+    mainClass = 'com.mygdx.game.DesktopLauncher'
+}
+
+dependencies {
+    implementation project(":core")
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+jar {
+    archiveBaseName.set("${appName}-desktop")
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+}
+
+task run(type: JavaExec) {
+    dependsOn classes
+    mainClass = application.mainClass.get()
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.`in`
+    workingDir = rootProject.file('assets').absolutePath
     ignoreExitValue = true
-}
-
-mainClassName = "com.badlogic.gradletest.DesktopLauncher"
-
-sourceSets.main.resources.srcDirs = [file("../android/assets").getAbsolutePath()]
-
-eclipse.project {
-    name = appName + "-desktop"
-}
-
-tasks.ideaModule.doFirst {
-    sourceSets.main.resources.srcDirs = []
 }
