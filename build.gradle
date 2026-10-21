@@ -1,54 +1,57 @@
 buildscript {
-    repositories { mavenCentral() }
-    dependencies { classpath 'com.android.tools.build:gradle:7.4.2' }
-}
-
-allprojects {
-    apply plugin: 'idea'
-
-    version = "1.0"
-    ext.appName = "mygame"
-    ext.gdxVersion = "1.11.0" // Use "1.0-SNAPSHOT" for nightly build
-
     repositories {
+        mavenLocal()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        mavenLocal();
+        google()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
-subprojects {
+allprojects {
     apply plugin: "eclipse"
-}
+    apply plugin: "idea"
 
-project(":core") {
-    apply plugin: "java"
+    version = '1.0'
+    ext {
+        appName = "Shoot"
+        gdxVersion = '1.11.0'
+    }
 
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/releases/' }
     }
 }
 
 project(":desktop") {
-    apply plugin: "java"
-    apply plugin: "application"
-
+    apply plugin: "java-library"
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        implementation project(":core")
+        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }
 
 project(":android") {
-    apply plugin: "android"
-
-    configurations { natives }
-
+    apply plugin: "com.android.application"
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        implementation project(":core")
+        implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
+        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
+    }
+}
+
+project(":core") {
+    apply plugin: "java-library"
+    dependencies {
+        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     }
 }
