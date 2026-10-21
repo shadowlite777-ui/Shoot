@@ -64,6 +64,6 @@ task copyAndroidNatives {
     }
 }
 
-tasks.matching { it.name == 'preBuild' || it.name == 'preDebugBuild' || it.name == 'preReleaseBuild' }.all {
-    it.dependsOn(copyAndroidNatives)
+tasks.named('preBuild').configure {
+    dependsOn copyAndroidNatives
 }
